@@ -1,0 +1,21 @@
+diff -uNdr mxser.orig/driver/kernel5.x/mxpcie.c mxser/driver/kernel5.x/mxpcie.c
+--- mxser.orig/driver/kernel5.x/mxpcie.c	2019-09-04 05:27:57.000000000 +0300
++++ mxser/driver/kernel5.x/mxpcie.c	2021-05-26 21:18:35.114221007 +0300
+@@ -1824,7 +1824,7 @@
+ 			if (copy_to_user((void*)arg, &uchCap, sizeof(unsigned char) * MXUPCIE_BOARDS))
+ 				return -EFAULT;
+ 
+-			return ;
++			return 0;
+ 		}
+ #if 0
+ 		case SMARTIO_GET_PCI_CAPABILITY:{
+@@ -1987,7 +1987,7 @@
+ 					break;
+ 			}
+ 			
+-			return;
++			return 0;
+ 		}
+ 		default:
+ 			return -ENOIOCTLCMD;

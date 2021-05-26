@@ -4,7 +4,7 @@
 
 Name:           dkms-%{module_name}
 Version:        5
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Kernel module for Moxa serial controllers
 
 Group:          System Environment/Kernel
@@ -15,6 +15,7 @@ Source1:        dkms.conf
 Source2:        disable-fifo-moxa.sh
 Source3:        mxser-disable-fifo.service
 Patch1:         mxser_include_fix.patch
+Patch2:         mxser_fix_incorrect_returns.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires:       dkms kernel-devel gcc make systemd bash
 BuildRequires:  systemd-rpm-macros
@@ -26,6 +27,7 @@ Kernel module driver source for Moxa serial controllers
 %prep
 %setup -q -n %{module_name}
 %patch1 -p1 -b .includes-patch
+%patch2 -p1 -b .incorrect-returns
 
 #build
 
@@ -65,6 +67,9 @@ rm -rf $RPM_BUILD_ROOT
 %systemd_postun_with_restart mxser-disable-fifo.service
 
 %changelog
+* Wed May 26 2021 Alexei Panov <alexei@panov.email> - 5-3
+- fixed incorrect returns
+
 * Fri Oct 23 2020 Alexei Panov <alexei@panov.email> - 5-2
 - added unit and script for disablt FIFO buffer on serial ports
 
