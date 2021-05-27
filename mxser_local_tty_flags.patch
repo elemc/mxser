@@ -1,28 +1,28 @@
 diff -uNdr mxser.orig/driver/kernel5.x/mxpcie.c mxser/driver/kernel5.x/mxpcie.c
---- mxser.orig/driver/kernel5.x/mxpcie.c	2021-05-27 09:31:21.000000000 +0300
-+++ mxser/driver/kernel5.x/mxpcie.c	2021-05-27 09:35:34.000000000 +0300
+--- mxser.orig/driver/kernel5.x/mxpcie.c	2021-05-27 09:50:35.000000000 +0300
++++ mxser/driver/kernel5.x/mxpcie.c	2021-05-27 09:50:58.000000000 +0300
 @@ -28,6 +28,7 @@
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
  
- #include "../../mx_ver.h"
+ #include "mx_ver.h"
 +#include "tty_flags.h"
  
  #include <linux/version.h>
  #define	VERSION_CODE(ver,rel,seq)	((ver << 16) | (rel << 8) | seq)
 diff -uNdr mxser.orig/driver/kernel5.x/mxser.c mxser/driver/kernel5.x/mxser.c
---- mxser.orig/driver/kernel5.x/mxser.c	2021-05-27 09:31:21.000000000 +0300
-+++ mxser/driver/kernel5.x/mxser.c	2021-05-27 09:35:25.000000000 +0300
+--- mxser.orig/driver/kernel5.x/mxser.c	2021-05-27 09:50:35.000000000 +0300
++++ mxser/driver/kernel5.x/mxser.c	2021-05-27 09:51:03.000000000 +0300
 @@ -17,6 +17,7 @@
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
  
- #include "../../mx_ver.h"
+ #include "mx_ver.h"
 +#include "tty_flags.h"
  
  #include <linux/version.h>
  #define	VERSION_CODE(ver,rel,seq)	((ver << 16) | (rel << 8) | seq)
 diff -uNdr mxser.orig/driver/kernel5.x/tty_flags.h mxser/driver/kernel5.x/tty_flags.h
 --- mxser.orig/driver/kernel5.x/tty_flags.h	1970-01-01 03:00:00.000000000 +0300
-+++ mxser/driver/kernel5.x/tty_flags.h	2021-05-27 09:36:01.000000000 +0300
++++ mxser/driver/kernel5.x/tty_flags.h	2021-05-27 09:50:41.000000000 +0300
 @@ -0,0 +1,93 @@
 +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
 +#ifndef _LOCAL_TTY_FLAGS_H
