@@ -4,7 +4,7 @@
 
 Name:           dkms-%{module_name}
 Version:        5
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Kernel module for Moxa serial controllers
 
 Group:          System Environment/Kernel
@@ -16,6 +16,7 @@ Source2:        disable-fifo-moxa.sh
 Source3:        mxser-disable-fifo.service
 Patch1:         mxser_include_fix.patch
 Patch2:         mxser_fix_incorrect_returns.patch
+Patch3:         mxser_local_tty_flags.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires:       dkms kernel-devel gcc make systemd bash
 BuildRequires:  systemd-rpm-macros
@@ -28,6 +29,7 @@ Kernel module driver source for Moxa serial controllers
 %setup -q -n %{module_name}
 %patch1 -p1 -b .includes-patch
 %patch2 -p1 -b .incorrect-returns
+%patch3 -p1 -b .local_tty_flags
 
 #build
 
@@ -67,6 +69,9 @@ rm -rf $RPM_BUILD_ROOT
 %systemd_postun_with_restart mxser-disable-fifo.service
 
 %changelog
+* Thu May 27 2021 Alexei Panov <alexei@panov.email> - 5-4
+- added local TTY flags header file
+
 * Wed May 26 2021 Alexei Panov <alexei@panov.email> - 5-3
 - fixed incorrect returns
 
