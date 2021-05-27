@@ -4,7 +4,7 @@
 
 Name:           dkms-%{module_name}
 Version:        5
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Kernel module for Moxa serial controllers
 
 Group:          System Environment/Kernel
@@ -56,19 +56,28 @@ rm -rf $RPM_BUILD_ROOT
 %doc readme.txt
 
 %post
-/usr/sbin/dkms add -m %{module_name} -v %{version}
+occurrences=/usr/sbin/dkms status | grep "%{module_name}" | grep "%{version}" | wc -l
+if [ ! occurrences > 0 ];
+then
+    /usr/sbin/dkms add -m %{module_name} -v %{version}
+fi
+/usr/sbin/dkms build -m %{module_name} -v %{version}
+/usr/sbin/dkms install -m %{module_name} -v %{version}
 %systemd_post mxser-disable-fifo.service
-
+exit 0
 
 %preun
-/usr/sbin/dkms uninstall -m %{module_name} -v %{version}
 /usr/sbin/dkms remove -m %{module_name} -v %{version} --all
 %systemd_preun mxser-disable-fifo.service
+exit 0
 
 %postun
 %systemd_postun_with_restart mxser-disable-fifo.service
 
 %changelog
+* Thu May 27 2021 Alexei Panov <alexei@panov.email> - 5-5
+- changed preun and postin scripts
+
 * Thu May 27 2021 Alexei Panov <alexei@panov.email> - 5-4
 - added local TTY flags header file
 
