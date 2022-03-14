@@ -3,20 +3,18 @@
 %{?systemd_requires}
 
 Name:           dkms-%{module_name}
-Version:        5
-Release:        5%{?dist}
+Version:        4
+Release:        1%{?dist}
 Summary:        Kernel module for Moxa serial controllers
 
 Group:          System Environment/Kernel
 License:        Proprietary
 URL:            https://moxa.com
-Source0:        https://moxa.com/getmedia/03ca2468-f62a-4c7e-ac1e-c9c9d8c62895/moxa-linux-kernel-5.x.x-driver-v%{version}.0.tgz
+Source0:	https://cdn-cms.azureedge.net/getmedia/c7c46cba-df8c-4645-92f5-47092b8906c0/moxa-msb-linux-kernel-4.x.x-driver-v4.1.tgz 
 Source1:        dkms.conf
 Source2:        disable-fifo-moxa.sh
 Source3:        mxser-disable-fifo.service
-Patch1:         mxser_include_fix.patch
-Patch2:         mxser_fix_incorrect_returns.patch
-Patch3:         mxser_local_tty_flags.patch
+Patch1:		mxser_access_ok_fix_and_include_fix.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires:       dkms kernel-devel gcc make systemd bash
 BuildRequires:  systemd-rpm-macros
@@ -27,9 +25,7 @@ Kernel module driver source for Moxa serial controllers
 
 %prep
 %setup -q -n %{module_name}
-%patch1 -p1 -b .includes-patch
-%patch2 -p1 -b .incorrect-returns
-%patch3 -p1 -b .local_tty_flags
+%patch1 -p1 -b .access_ok_and_include_fix
 
 #build
 
@@ -40,7 +36,7 @@ mkdir -p $RPM_BUILD_ROOT%{_srcdir}/%{module_name}-%{version}
 mkdir -p $RPM_BUILD_ROOT%{_bindir}
 mkdir -p $RPM_BUILD_ROOT%{_unitdir}
 cp -r %{_builddir}/%{module_name}/driver/* $RPM_BUILD_ROOT%{_srcdir}/%{module_name}-%{version}/
-cp %{_builddir}/%{module_name}/mx_ver.h $RPM_BUILD_ROOT%{_srcdir}/%{module_name}-%{version}/kernel5.x/
+cp %{_builddir}/%{module_name}/mx_ver.h $RPM_BUILD_ROOT%{_srcdir}/%{module_name}-%{version}/kernel4.x/
 install -D -m 0644 %{SOURCE1} $RPM_BUILD_ROOT%{_srcdir}/%{module_name}-%{version}/dkms.conf
 install -D -m 0644 %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/disable-fifo-moxa.sh
 install -D -m 0644 %{SOURCE3} $RPM_BUILD_ROOT%{_unitdir}/mxser-disable-fifo.service
@@ -75,17 +71,6 @@ exit 0
 %systemd_postun_with_restart mxser-disable-fifo.service
 
 %changelog
-* Thu May 27 2021 Alexei Panov <alexei@panov.email> - 5-5
-- changed preun and postin scripts
+* Mon Mar 14 2022 Alexei Panov <alexei@panov.email> - 4-1
+- initial build for EPEL (version 8)
 
-* Thu May 27 2021 Alexei Panov <alexei@panov.email> - 5-4
-- added local TTY flags header file
-
-* Wed May 26 2021 Alexei Panov <alexei@panov.email> - 5-3
-- fixed incorrect returns
-
-* Fri Oct 23 2020 Alexei Panov <alexei@panov.email> - 5-2
-- added unit and script for disablt FIFO buffer on serial ports
-
-* Wed Oct 21 2020 Alexei Panov <alexei@panov.email> - 5-1
-- Initial build

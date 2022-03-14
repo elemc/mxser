@@ -1,0 +1,82 @@
+diff -uNdr mxser.orig/driver/kernel4.x/Makefile mxser/driver/kernel4.x/Makefile
+--- mxser.orig/driver/kernel4.x/Makefile	2022-03-14 11:51:31.071959545 +0300
++++ mxser/driver/kernel4.x/Makefile	2022-03-14 12:17:31.708164149 +0300
+@@ -1,4 +1,4 @@
+-MXVER:=`awk '{if($$2=="MX_SER_VERSION"){print $$3}}' ../../mx_ver.h | sed s/\"//g`
++MXVER:=`awk '{if($$2=="MX_SER_VERSION"){print $$3}}' mx_ver.h | sed s/\"//g`
+ TARGET_DRIVER1:=mxser
+ TARGET_DRIVER2:=mxupcie
+ CPLD_PATH:=../CPLD/Source
+diff -uNdr mxser.orig/driver/kernel4.x/mxconf mxser/driver/kernel4.x/mxconf
+--- mxser.orig/driver/kernel4.x/mxconf	2022-03-14 11:51:31.071959545 +0300
++++ mxser/driver/kernel4.x/mxconf	2022-03-14 12:18:09.915446053 +0300
+@@ -17,12 +17,12 @@
+ ###############################################################################
+ 
+ #Parameters
+-MX_MSB_VERSION=`awk '{if($2=="MX_SER_VERSION"){print $3}}' ../../mx_ver.h | sed s/\"//g`
++MX_MSB_VERSION=`awk '{if($2=="MX_SER_VERSION"){print $3}}' mx_ver.h | sed s/\"//g`
+ MX_RELEASE=4.20.0
+ MX_VERSION=4
+ MX_PATCH_LEVEL=20
+ MX_SUBLEVEL=0
+-MX_RELEASE_DATE=`awk '{if($2=="MX_SER_DATE"){print $3}}' ../../mx_ver.h | sed s/\"//g`
++MX_RELEASE_DATE=`awk '{if($2=="MX_SER_DATE"){print $3}}' mx_ver.h | sed s/\"//g`
+ MX_VERSION_CODE=$(( ($MX_VERSION<<16)+($MX_PATCH_LEVEL<<8)+$MX_SUBLEVEL ))
+ 
+ K_MODULE_VERSION=$(uname -r)
+diff -uNdr mxser.orig/driver/kernel4.x/mxpcie.c mxser/driver/kernel4.x/mxpcie.c
+--- mxser.orig/driver/kernel4.x/mxpcie.c	2022-03-14 11:51:31.071959545 +0300
++++ mxser/driver/kernel4.x/mxpcie.c	2022-03-14 12:18:25.356562985 +0300
+@@ -27,7 +27,7 @@
+ 
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+ 
+-#include "../../mx_ver.h"
++#include "mx_ver.h"
+ 
+ #include <linux/version.h>
+ #define	VERSION_CODE(ver,rel,seq)	((ver << 16) | (rel << 8) | seq)
+diff -uNdr mxser.orig/driver/kernel4.x/mxpcie.h mxser/driver/kernel4.x/mxpcie.h
+--- mxser.orig/driver/kernel4.x/mxpcie.h	2022-03-14 11:51:31.071959545 +0300
++++ mxser/driver/kernel4.x/mxpcie.h	2022-03-14 12:00:48.252610505 +0300
+@@ -303,12 +303,7 @@
+ 
+ #define MX_TTY_DRV(x)	tty->driver->x
+ 
+-#ifdef SP3
+ #define MX_ACCESS_CHK(type, addr, size)	access_ok(addr, size)	
+-#else
+-#define MX_ACCESS_CHK(type, addr, size)	access_ok(type, addr, size)	
+-	
+-#endif
+ 
+ #define MX_ERR(x)	!(x)	
+ 
+diff -uNdr mxser.orig/driver/kernel4.x/mxser.c mxser/driver/kernel4.x/mxser.c
+--- mxser.orig/driver/kernel4.x/mxser.c	2022-03-14 11:51:31.071959545 +0300
++++ mxser/driver/kernel4.x/mxser.c	2022-03-14 12:18:35.907638757 +0300
+@@ -16,7 +16,7 @@
+ 
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+ 
+-#include "../../mx_ver.h"
++#include "mx_ver.h"
+ 
+ #include <linux/version.h>
+ #define	VERSION_CODE(ver,rel,seq)	((ver << 16) | (rel << 8) | seq)
+diff -uNdr mxser.orig/driver/kernel4.x/mxser.h mxser/driver/kernel4.x/mxser.h
+--- mxser.orig/driver/kernel4.x/mxser.h	2022-03-14 11:51:31.071959545 +0300
++++ mxser/driver/kernel4.x/mxser.h	2022-03-14 12:01:15.057809967 +0300
+@@ -428,11 +428,7 @@
+ 
+ #define MX_CGRP()	process_group(current)	
+ 
+-#ifdef SP3
+ #define MX_ACCESS_CHK(type, addr, size)	access_ok(addr, size)
+-#else
+-#define MX_ACCESS_CHK(type, addr, size)	access_ok(type, addr, size)
+-#endif
+ 
+ 
+ #define MX_ERR(x)	!(x)	
