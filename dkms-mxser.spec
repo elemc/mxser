@@ -4,17 +4,18 @@
 
 Name:           dkms-%{module_name}
 Version:        4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Kernel module for Moxa serial controllers
 
 Group:          System Environment/Kernel
 License:        Proprietary
 URL:            https://moxa.com
-Source0:	https://cdn-cms.azureedge.net/getmedia/c7c46cba-df8c-4645-92f5-47092b8906c0/moxa-msb-linux-kernel-4.x.x-driver-v4.1.tgz 
+Source0:	    https://cdn-cms.azureedge.net/getmedia/c7c46cba-df8c-4645-92f5-47092b8906c0/moxa-msb-linux-kernel-4.x.x-driver-v4.1.tgz
 Source1:        dkms.conf
 Source2:        disable-fifo-moxa.sh
 Source3:        mxser-disable-fifo.service
-Patch1:		mxser_access_ok_fix_and_include_fix.patch
+Patch1:		    mxser_access_ok_fix_and_include_fix.patch
+Patch2:         fix_new_kernel_state_naming.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires:       dkms kernel-devel gcc make systemd bash
 BuildRequires:  systemd-rpm-macros
@@ -26,6 +27,7 @@ Kernel module driver source for Moxa serial controllers
 %prep
 %setup -q -n %{module_name}
 %patch1 -p1 -b .access_ok_and_include_fix
+%patch2 -p1 -b .fix_new_kernel_state_naming.patch
 
 #build
 
@@ -71,6 +73,9 @@ exit 0
 %systemd_postun_with_restart mxser-disable-fifo.service
 
 %changelog
+* Thu Jun 30 2022 Alexei Panov <alexei@panov.email> - 4-2
+- added patch to fix rename state field
+
 * Mon Mar 14 2022 Alexei Panov <alexei@panov.email> - 4-1
 - initial build for EPEL (version 8)
 

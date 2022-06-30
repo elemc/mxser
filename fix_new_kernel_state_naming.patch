@@ -1,0 +1,12 @@
+diff -uNdr mxser.orig/driver/kernel4.x/mxpcie.c mxser/driver/kernel4.x/mxpcie.c
+--- mxser.orig/driver/kernel4.x/mxpcie.c	2022-06-30 12:54:39.000000000 +0300
++++ mxser/driver/kernel4.x/mxpcie.c	2022-06-30 12:57:36.000000000 +0300
+@@ -3753,7 +3753,7 @@
+ 
+ static void mx_pci_mdelay(unsigned howlong)
+ {
+-	current->state = TASK_INTERRUPTIBLE;
++	current->__state = TASK_INTERRUPTIBLE;
+ 	schedule_timeout(howlong);
+ }
+ 
