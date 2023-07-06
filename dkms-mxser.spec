@@ -4,7 +4,7 @@
 
 Name:           dkms-%{module_name}
 Version:        4
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Kernel module for Moxa serial controllers
 
 Group:          System Environment/Kernel
@@ -54,26 +54,31 @@ rm -rf $RPM_BUILD_ROOT
 %doc readme.txt
 
 %post
-occurrences=/usr/sbin/dkms status | grep "%{module_name}" | grep "%{version}" | wc -l
-if [ ! occurrences > 0 ];
-then
-    /usr/sbin/dkms add -m %{module_name} -v %{version}
-fi
-/usr/sbin/dkms build -m %{module_name} -v %{version}
-/usr/sbin/dkms install -m %{module_name} -v %{version}
+#occurrences=/usr/sbin/dkms status | grep "%{module_name}" | grep "%{version}" | wc -l
+#if [ ! occurrences > 0 ];
+#then
+    
+#fi
+/usr/sbin/dkms add -m %{module_name} -v %{version}
+#/usr/sbin/dkms build -m %{module_name} -v %{version}
+#/usr/sbin/dkms install -m %{module_name} -v %{version}
 %systemd_post mxser-disable-fifo.service
-exit 0
+#exit 0
 
 %preun
-/usr/sbin/dkms remove -m %{module_name} -v %{version} --all
 %systemd_preun mxser-disable-fifo.service
-exit 0
+/usr/sbin/dkms remove -m %{module_name} -v %{version} --all
 
 %postun
 %systemd_postun_with_restart mxser-disable-fifo.service
+/usr/sbin/dkms uninstall -m %{module_name} -v %{version}
+/usr/sbin/dkms remove -m %{module_name} -v %{version} --all
 
 %changelog
-* Thu Jul  6 2023 Alexei Panov <alexei@panov.email> - 4-2
+* Thu Jul  6 2023 Alexei Panov <alexei@panov.email> - 4-4
+- changed post and preun ections
+
+* Thu Jul  6 2023 Alexei Panov <alexei@panov.email> - 4-3
 - changed option "remake_initrd" to "yes" in dkms.conf file
 
 * Thu Jun 30 2022 Alexei Panov <alexei@panov.email> - 4-2
