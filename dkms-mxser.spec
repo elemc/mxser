@@ -4,7 +4,7 @@
 
 Name:           dkms-%{module_name}
 Version:        5
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Kernel module for Moxa serial controllers
 
 Group:          System Environment/Kernel
@@ -75,6 +75,9 @@ exit 0
 %systemd_postun_with_restart mxser-disable-fifo.service
 
 %changelog
+* Thu Jul  6 2023 Alexei Panov <alexei@panov.email> - 5-6
+- changed remake_initrd option to yes in dkms.conf
+
 * Thu May 27 2021 Alexei Panov <alexei@panov.email> - 5-5
 - changed preun and postin scripts
 
