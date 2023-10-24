@@ -4,7 +4,7 @@ Description=Trezor script for disable FIFO buffer on Moxa serial device
 [Service]
 Type=oneshot
 PIDFile=/var/run/mxser-disable-fifo.pid
-ExecStart=/usr/local/bin/disable-fifo-moxa.sh
+ExecStart=/usr/bin/disable-fifo-moxa.sh
 
 [Install]
 WantedBy=multi-user.target
