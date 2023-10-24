@@ -14,14 +14,10 @@ Source0:        https://cdn-cms.azureedge.net/getmedia/c93cf256-4b6d-442d-b18c-2
 Source1:        dkms.conf
 Source2:        disable-fifo-moxa.sh
 Source3:        mxser-disable-fifo.service
-Source4:        rc.mxser
-Source5:        mxser.service
 Source6:        moxa_unbind
 Source7:        moxa_unbind.service
 Source8:        mxupcie.conf
 Patch1:         mxser_include_ver_fix.patch
-# Patch1:		    mxser_access_ok_fix_and_include_fix.patch
-# Patch2:         fix_new_kernel_state_naming.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires:       dkms kernel-devel gcc make systemd bash
 BuildRequires:  systemd-rpm-macros
@@ -51,8 +47,6 @@ cp %{_builddir}/%{module_name}/mx_ver.h $RPM_BUILD_ROOT%{_srcdir}/%{module_name}
 install -D -m 0644 %{SOURCE1} $RPM_BUILD_ROOT%{_srcdir}/%{module_name}-%{version}/dkms.conf
 install -D -m 0644 %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/disable-fifo-moxa.sh
 install -D -m 0644 %{SOURCE3} $RPM_BUILD_ROOT%{_unitdir}/mxser-disable-fifo.service
-# install -D -m 0755 %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/init.d/rc.mxser
-# install -D -m 0644 %{SOURCE5} $RPM_BUILD_ROOT%{_unitdir}/mxser.service
 install -D -m 0755 %{SOURCE6} $RPM_BUILD_ROOT%{_sysconfdir}/moxa/moxa_unbind
 install -D -m 0644 %{SOURCE7} $RPM_BUILD_ROOT%{_unitdir}/mxser_unbind.service
 install -D -m 0644 %{SOURCE8} $RPM_BUILD_ROOT%{_modprobedir}/mxupcie.conf
@@ -65,8 +59,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_srcdir}/%{module_name}-%{version}/*
 %{_bindir}/disable-fifo-moxa.sh
 %{_unitdir}/mxser-disable-fifo.service
-# %{_unitdir}/mxser.service
-# %{_sysconfdir}/init.d/rc.mxser
 %{_sysconfdir}/moxa/moxa_unbind
 %{_unitdir}/moxa_unbind.service
 %{_modprobedir}/mxupcie.conf
@@ -82,7 +74,6 @@ rm -rf $RPM_BUILD_ROOT
 #/usr/sbin/dkms build -m %{module_name} -v %{version}
 #/usr/sbin/dkms install -m %{module_name} -v %{version}
 %systemd_post mxser-disable-fifo.service
-# %systemd_post mxser.service
 %systemd_post mxser_unbind.service
 #exit 0
 
