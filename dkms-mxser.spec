@@ -19,7 +19,7 @@ Source5:        mxser.service
 Source6:        moxa_unbind
 Source7:        moxa_unbind.service
 Source8:        mxupcie.conf
-Patch1:         mxser_include_ver_fix.patch~~
+Patch1:         mxser_include_ver_fix.patch
 # Patch1:		    mxser_access_ok_fix_and_include_fix.patch
 # Patch2:         fix_new_kernel_state_naming.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -32,7 +32,7 @@ Kernel module driver source for Moxa serial controllers
 
 %prep
 %setup -q -n %{module_name}
-%patch1 -p1 -b .access_ok_and_include_fix
+%patch 1 -p1 -b .access_ok_and_include_fix
 # %patch2 -p1 -b .fix_new_kernel_state_naming.patch
 
 #build
