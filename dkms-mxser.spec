@@ -28,8 +28,7 @@ Kernel module driver source for Moxa serial controllers
 
 %prep
 %setup -q -n %{module_name}
-%patch 1 -p1 -b .access_ok_and_include_fix
-# %patch2 -p1 -b .fix_new_kernel_state_naming.patch
+%patch1 -p1 -b .include_fix
 
 #build
 
