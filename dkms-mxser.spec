@@ -47,7 +47,7 @@ install -D -m 0644 %{SOURCE1} $RPM_BUILD_ROOT%{_srcdir}/%{module_name}-%{version
 install -D -m 0644 %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/disable-fifo-moxa.sh
 install -D -m 0644 %{SOURCE3} $RPM_BUILD_ROOT%{_unitdir}/mxser-disable-fifo.service
 install -D -m 0755 %{SOURCE6} $RPM_BUILD_ROOT%{_sysconfdir}/moxa/moxa_unbind
-install -D -m 0644 %{SOURCE7} $RPM_BUILD_ROOT%{_unitdir}/mxser_unbind.service
+install -D -m 0644 %{SOURCE7} $RPM_BUILD_ROOT%{_unitdir}/moxa_unbind.service
 install -D -m 0644 %{SOURCE8} $RPM_BUILD_ROOT%{_modprobedir}/mxupcie.conf
 
 %clean
@@ -73,7 +73,7 @@ rm -rf $RPM_BUILD_ROOT
 #/usr/sbin/dkms build -m %{module_name} -v %{version}
 #/usr/sbin/dkms install -m %{module_name} -v %{version}
 %systemd_post mxser-disable-fifo.service
-%systemd_post mxser_unbind.service
+%systemd_post moxa_unbind.service
 #exit 0
 
 %preun
