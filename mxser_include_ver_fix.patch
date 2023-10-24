@@ -1,0 +1,51 @@
+diff -uNdr mxser.orig/driver/kernel4.x/Makefile mxser/driver/kernel4.x/Makefile
+--- mxser.orig/driver/kernel4.x/Makefile	2022-07-22 11:06:31
++++ mxser/driver/kernel4.x/Makefile	2023-10-24 12:17:34
+@@ -1,4 +1,4 @@
+-MXVER:=`awk '{if($$2=="MX_SER_VERSION"){print $$3}}' ../../mx_ver.h | sed s/\"//g`
++MXVER:=`awk '{if($$2=="MX_SER_VERSION"){print $$3}}' mx_ver.h | sed s/\"//g`
+ TARGET_DRIVER1:=mxser
+ TARGET_DRIVER2:=mxupcie
+ CPLD_PATH:=../CPLD/Source
+diff -uNdr mxser.orig/driver/kernel4.x/mxconf mxser/driver/kernel4.x/mxconf
+--- mxser.orig/driver/kernel4.x/mxconf	2022-07-22 11:06:31
++++ mxser/driver/kernel4.x/mxconf	2023-10-24 12:18:03
+@@ -17,12 +17,12 @@
+ ###############################################################################
+ 
+ #Parameters
+-MX_MSB_VERSION=`awk '{if($2=="MX_SER_VERSION"){print $3}}' ../../mx_ver.h | sed s/\"//g`
++MX_MSB_VERSION=`awk '{if($2=="MX_SER_VERSION"){print $3}}' mx_ver.h | sed s/\"//g`
+ MX_RELEASE=4.20.0
+ MX_VERSION=4
+ MX_PATCH_LEVEL=20
+ MX_SUBLEVEL=0
+-MX_RELEASE_DATE=`awk '{if($2=="MX_SER_DATE"){print $3}}' ../../mx_ver.h | sed s/\"//g`
++MX_RELEASE_DATE=`awk '{if($2=="MX_SER_DATE"){print $3}}' mx_ver.h | sed s/\"//g`
+ MX_VERSION_CODE=$(( ($MX_VERSION<<16)+($MX_PATCH_LEVEL<<8)+$MX_SUBLEVEL ))
+ 
+ K_MODULE_VERSION=$(uname -r)
+diff -uNdr mxser.orig/driver/kernel4.x/mxpcie.c mxser/driver/kernel4.x/mxpcie.c
+--- mxser.orig/driver/kernel4.x/mxpcie.c	2022-07-22 11:06:31
++++ mxser/driver/kernel4.x/mxpcie.c	2023-10-24 12:18:48
+@@ -27,7 +27,7 @@
+ 
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+ 
+-#include "../../mx_ver.h"
++#include "mx_ver.h"
+ 
+ #include <linux/version.h>
+ #define	VERSION_CODE(ver,rel,seq)	((ver << 16) | (rel << 8) | seq)
+diff -uNdr mxser.orig/driver/kernel4.x/mxser.c mxser/driver/kernel4.x/mxser.c
+--- mxser.orig/driver/kernel4.x/mxser.c	2022-07-22 11:06:31
++++ mxser/driver/kernel4.x/mxser.c	2023-10-24 12:19:05
+@@ -16,7 +16,7 @@
+ 
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+ 
+-#include "../../mx_ver.h"
++#include "mx_ver.h"
+ 
+ #include <linux/version.h>
+ #define	VERSION_CODE(ver,rel,seq)	((ver << 16) | (rel << 8) | seq)
