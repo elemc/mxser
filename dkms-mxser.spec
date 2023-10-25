@@ -4,7 +4,7 @@
 
 Name:           dkms-%{module_name}
 Version:        4
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Kernel module for Moxa serial controllers
 
 Group:          System Environment/Kernel
@@ -40,15 +40,15 @@ mkdir -p $RPM_BUILD_ROOT%{_bindir}
 mkdir -p $RPM_BUILD_ROOT%{_unitdir}
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/moxa
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/init.d
-mkdir -p $RPM_BUILD_ROOT%{_modprobedir}
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/modprobe.d
 cp -r %{_builddir}/%{module_name}/driver/* $RPM_BUILD_ROOT%{_srcdir}/%{module_name}-%{version}/
 cp %{_builddir}/%{module_name}/mx_ver.h $RPM_BUILD_ROOT%{_srcdir}/%{module_name}-%{version}/kernel4.x/
 install -D -m 0644 %{SOURCE1} $RPM_BUILD_ROOT%{_srcdir}/%{module_name}-%{version}/dkms.conf
-install -D -m 0644 %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/disable-fifo-moxa.sh
+install -D -m 0755 %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/disable-fifo-moxa.sh
 install -D -m 0644 %{SOURCE3} $RPM_BUILD_ROOT%{_unitdir}/mxser-disable-fifo.service
 install -D -m 0755 %{SOURCE6} $RPM_BUILD_ROOT%{_sysconfdir}/moxa/moxa_unbind
 install -D -m 0644 %{SOURCE7} $RPM_BUILD_ROOT%{_unitdir}/moxa_unbind.service
-install -D -m 0644 %{SOURCE8} $RPM_BUILD_ROOT%{_modprobedir}/mxupcie.conf
+install -D -m 0644 %{SOURCE8} $RPM_BUILD_ROOT%{_sysconfdir}/modprobe.d/mxupcie.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -60,7 +60,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_unitdir}/mxser-disable-fifo.service
 %{_sysconfdir}/moxa/moxa_unbind
 %{_unitdir}/moxa_unbind.service
-%{_modprobedir}/mxupcie.conf
+%{_sysconfdir}/modprobe.d/mxupcie.conf
 %doc readme.txt
 
 %post
@@ -78,6 +78,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %preun
 %systemd_preun mxser-disable-fifo.service
+%systemd_preun moxa_unbind.service
 /usr/sbin/dkms remove -m %{module_name} -v %{version} --all
 
 %postun
@@ -87,6 +88,9 @@ rm -rf $RPM_BUILD_ROOT
 /usr/sbin/dkms remove -m %{module_name} -v %{version} --all
 
 %changelog
+* Wed Oct 25 2023 Alexei Panov <alexei@panov.email> - 4-6
+- more changes for drivers work
+
 * Tue Oct 24 2023 Alexei Panov <alexei@panov.email> - 4-5
 - added second kernel module
 
