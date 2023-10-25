@@ -4,7 +4,7 @@
 
 Name:           dkms-%{module_name}
 Version:        4
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Kernel module for Moxa serial controllers
 
 Group:          System Environment/Kernel
@@ -64,17 +64,10 @@ rm -rf $RPM_BUILD_ROOT
 %doc readme.txt
 
 %post
-#occurrences=/usr/sbin/dkms status | grep "%{module_name}" | grep "%{version}" | wc -l
-#if [ ! occurrences > 0 ];
-#then
-    
-#fi
 /usr/sbin/dkms add -m %{module_name} -v %{version}
-#/usr/sbin/dkms build -m %{module_name} -v %{version}
-#/usr/sbin/dkms install -m %{module_name} -v %{version}
 %systemd_post mxser-disable-fifo.service
 %systemd_post moxa_unbind.service
-#exit 0
+/usr/bin/systemctl enable moxa_unbind.service
 
 %preun
 %systemd_preun mxser-disable-fifo.service
@@ -88,6 +81,9 @@ rm -rf $RPM_BUILD_ROOT
 /usr/sbin/dkms remove -m %{module_name} -v %{version} --all
 
 %changelog
+* Wed Oct 25 2023 Alexei Panov <alexei@panov.email> - 4-7
+- changes for moxa unbind service
+
 * Wed Oct 25 2023 Alexei Panov <alexei@panov.email> - 4-6
 - more changes for drivers work
 
